@@ -8,12 +8,13 @@ phases:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 449750766897.dkr.ecr.us-east-2.amazonaws.com
       - REPOSITORY_URI=449750766897.dkr.ecr.us-east-2.amazonaws.com/pucrs-fullstack
       - IMAGE_TAG=${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - export OPENAI_API_KEY=$(aws secretsmanager get-secret-value --secret-id openai-key --query SecretString --output text)
 
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+      - docker build --build-arg OPENAI_API_KEY=$OPENAI_API_KEY -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $IMAGE_TAG
 
   post_build:
