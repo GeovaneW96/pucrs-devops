@@ -1,6 +1,7 @@
 FROM node:18
 USER root
 
+ARG OPENAI_API_KEY
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
 COPY package.json package-lock.json
