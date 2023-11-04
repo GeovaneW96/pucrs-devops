@@ -11,7 +11,7 @@ phases:
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 449750766897.dkr.ecr.us-east-2.amazonaws.com
       - REPOSITORY_URI=449750766897.dkr.ecr.us-east-2.amazonaws.com/pucrs-fullstack
       - IMAGE_TAG=${REPOSITORY_URI}:${CODEBUILD_RESOLVED_SOURCE_VERSION}
-      - echo OPENAI_KEY $OPENAI_API_KEY
+      - OPENAI_API_KEY=$(echo $OPENAI_API_KEY | jq -r '.OPENAI_API_KEY')
   build:
     commands:
       - echo Build started on `date`
